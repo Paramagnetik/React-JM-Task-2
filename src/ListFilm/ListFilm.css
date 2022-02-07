@@ -1,0 +1,8 @@
+.list {
+    display: flex;
+    width: 1010px;
+    flex-wrap: wrap;
+    background: #FFF;
+    margin: 0 auto;
+
+}
