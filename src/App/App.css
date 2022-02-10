@@ -1,0 +1,29 @@
+.pagination {
+    text-align: center;
+    margin-top: 37px;
+    height: 22px;
+}
+
+#root {
+    text-align: center;
+
+}
+
+.ant-pagination-item,
+.ant-pagination-item-link,
+.ant-select-selector {
+    background: none !important;
+    border: none !important;
+}
+
+.ant-spin {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ant-pagination-item-active a {
+    background: #1890FF;
+    border-radius: 4px;
+    color: white;
+}

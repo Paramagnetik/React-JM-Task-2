@@ -4,5 +4,23 @@
     flex-wrap: wrap;
     background: #FFF;
     margin: 0 auto;
+    justify-content: center;
+}
 
+.list-search {
+    height: 40px;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin: 19px 36px 34px 36px;
+    font-family: 'Inter', 'sans-serif';
+}
+
+.ant-tabs-nav {
+    margin-bottom: 0 !important;
+    font-family: 'Inter', 'sans-serif';
 }
