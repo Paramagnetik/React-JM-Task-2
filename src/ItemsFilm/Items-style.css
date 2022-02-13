@@ -46,7 +46,6 @@
 }
 
 .button {
-    width: 46px;
     height: 20px;
     background: #FAFAFA;
     border: 1px solid #D9D9D9;
@@ -56,7 +55,7 @@
     line-height: 15px;
     margin-right: 8px;
     border-radius: 2px;
-
+    padding: 2px 3px 3px 5px;
 }
 
 .list-items-container__wrapper {
@@ -79,10 +78,16 @@
 }
 
 .ellipse {
+    display: flex;
     width: 30px;
     height: 30px;
     border: 2px solid #E9D100;
     border-radius: 50%;
+    font-family: 'Inter', 'sans-serif';
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
 }
 
 .list-title {
