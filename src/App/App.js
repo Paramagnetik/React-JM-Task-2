@@ -26,7 +26,14 @@ async function getGenre() {
   return genre
 }
 
+async function getGuestSession() {
+  const guestSession = await fetch("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=89e18e7c29b68fe0aa104ac7ae2955eb");
+  const sesion = await guestSession.json();
+  return sesion
+}
+
 function App() {
+  const [guestSession, setguestSession] = React.useState({});
   const [films, setFilms] = React.useState([]);
   const [filmsGenre, setFilmsGenre] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(true);
@@ -35,14 +42,17 @@ function App() {
   const [isError, setError] = React.useState(false);
   const [value, setValue] = React.useState("star");
 
+
   React.useEffect(() => {
     let isCancel = false
     async function init() {
 
       const movies = await getFilms.getResource(current, value);
       const genre = await getGenre();
+      const session = await getGuestSession();
 
       if (!isCancel) {
+        setguestSession(session.guest_session_id)
         setFilms(movies.results);
         setTotal(movies.total_results);
         setFilmsGenre(genre)
@@ -84,7 +94,7 @@ function App() {
       type="warning"
       closable
     /></Offline>
-    <ListFilm films={films} filmsGenre={filmsGenre.genres} debouncedOnChange={debouncedOnChange} />
+    <ListFilm films={films} filmsGenre={filmsGenre.genres} debouncedOnChange={debouncedOnChange}  guestSession={guestSession}/>
     <Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} />
   </div>
 }
