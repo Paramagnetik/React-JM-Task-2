@@ -2,12 +2,17 @@
     background: rgba(255, 255, 255, 1);
     display: flex;
     width: 454px;
-    margin-bottom: 35px;
+    margin-bottom: 32px;
     filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
 }
 
-.list-items:nth-child(2n) {
-    margin-left: 36px;
+.list-items:nth-child(2),
+.list-items:nth-child(3){
+    margin-top: 34px;
+}
+
+.list-items:nth-child(2n+2) {
+   margin-right: 36px;
 }
 
 .list-items__img {

@@ -1,22 +1,17 @@
-/* eslint-disable react/jsx-no-bind */
-import React from 'react';
-import { Pagination, Spin, Alert } from 'antd';
+import React, { useMemo } from 'react';
+import { Tabs, Alert } from 'antd';
 import { Offline } from "react-detect-offline";
-import _debounce from 'lodash/debounce';
 import "./App.css";
-import ListFilm from '../ListFilm/ListFilm';
+import Films from "../Films/Films";
+import FilmsRate from "../FilmsRate/FilmsRate";
+import FilmsGenreContext from "../contex";
 
-const getFilms = {
-  async getResource(currentPage, value) {
-    const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=89e18e7c29b68fe0aa104ac7ae2955eb&query=${value}&page=${currentPage}`);
+const { TabPane } = Tabs;
 
-    if (!res.ok) {
-      throw new Error(`error`)
-    }
-
-    const body = await res.json()
-    return body
-  }
+async function getGuestSession() {
+  const guestSessionFilms = await fetch("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=89e18e7c29b68fe0aa104ac7ae2955eb");
+  const sesion = await guestSessionFilms.json();
+  return sesion
 }
 
 async function getGenre() {
@@ -26,76 +21,41 @@ async function getGenre() {
   return genre
 }
 
-async function getGuestSession() {
-  const guestSession = await fetch("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=89e18e7c29b68fe0aa104ac7ae2955eb");
-  const sesion = await guestSession.json();
-  return sesion
-}
-
 function App() {
-  const [guestSession, setguestSession] = React.useState({});
-  const [films, setFilms] = React.useState([]);
+  const [guestSession, setguestSession] = React.useState("");
   const [filmsGenre, setFilmsGenre] = React.useState([])
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [current, setCurrent] = React.useState(1);
-  const [total, setTotal] = React.useState(null);
-  const [isError, setError] = React.useState(false);
-  const [value, setValue] = React.useState("star");
+  const [activeTab, setActiveTab] = React.useState("search");
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab)
+  }
 
   React.useEffect(() => {
-    let isCancel = false
     async function init() {
-
-      const movies = await getFilms.getResource(current, value);
-      const genre = await getGenre();
       const session = await getGuestSession();
+      setguestSession(session.guest_session_id);
+      const genre = await getGenre();
+      setFilmsGenre(genre)
 
-      if (!isCancel) {
-        setguestSession(session.guest_session_id)
-        setFilms(movies.results);
-        setTotal(movies.total_results);
-        setFilmsGenre(genre)
-      }
+    };
+    init()
+  }, [])
 
-      setIsLoading(false);
-    }
-    init().then(() => setError(false)
-    ).catch(() => setError(true))
-
-    return () => { isCancel = true }
-  }, [current, value])
-
-  const debouncedOnChange = _debounce(((ev) => {
-    if (ev.target.value.length === 0) {
-      setValue("star")
-      return
-    }
-    setValue(ev.target.value)
-  }), 500)
-
-  function onChange(page) {
-    setCurrent(page);
-  };
-
-  if (isError) {
-    return <Alert message="Warning Text Warning Text Warning TextW arning Text Warning Text Warning TextWarning Text"
-      type="warning"
-      closable
-    />
-  }
-
-  if (isLoading) {
-    return <Spin size="large" />
-  }
+  const foo = useMemo(() => ({ filmsGenre, setFilmsGenre }), [filmsGenre]);
 
   return <div>
     <Offline><Alert message="Ошибка сети"
       type="warning"
       closable
     /></Offline>
-    <ListFilm films={films} filmsGenre={filmsGenre.genres} debouncedOnChange={debouncedOnChange}  guestSession={guestSession}/>
-    <Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} />
+    <React.StrictMode>
+      <FilmsGenreContext.Provider value={foo}>
+        <Tabs defaultActiveKey="1" onChange={handleTabClick}>
+          <TabPane tab="Search" key="search" > {activeTab === "search" && <Films guestSession={guestSession} filmsGenre={filmsGenre.genres} />} </TabPane>
+          <TabPane tab="Rated" key="rate" > {activeTab === "rate" && <FilmsRate guestSession={guestSession} filmsGenre={filmsGenre.genres} activeTab={activeTab}/>} </TabPane>
+        </Tabs>
+      </FilmsGenreContext.Provider>
+    </React.StrictMode>
   </div>
 }
 

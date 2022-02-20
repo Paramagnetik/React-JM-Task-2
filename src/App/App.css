@@ -1,12 +1,10 @@
 .pagination {
     text-align: center;
-    margin-top: 37px;
-    height: 22px;
+    margin-top: 5px;
 }
 
 #root {
     text-align: center;
-
 }
 
 .ant-pagination-item,
@@ -26,4 +24,8 @@
     background: #1890FF;
     border-radius: 4px;
     color: white;
+}
+
+.ant-tabs-nav-wrap {
+    justify-content: center;
 }
