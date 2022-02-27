@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import './Items-style.css';
 import { format } from 'date-fns';
 
-export default function ItemsFilm({ title, date, img, overview, genre, filmsGenre, filmsId, guestSession }) {
-    const [vote, setVote] = React.useState(0);
+export default function ItemsFilm({ title, date, img, overview, genre, filmsGenre, filmsId, guestSession, rating }) {
+    const [vote, setVote] = React.useState(rating || 0);
 
     function textOverflow(string) {
         const index = string.slice(0, 208).lastIndexOf(" ");
@@ -20,6 +20,7 @@ export default function ItemsFilm({ title, date, img, overview, genre, filmsGenr
         }
         return acc
     }, [])
+
 
     const onChangeVote = (rate) => {
         async function changeVote() {
@@ -37,6 +38,7 @@ export default function ItemsFilm({ title, date, img, overview, genre, filmsGenr
         changeVote();
         setVote(rate);
     }
+
     function voteColor() {
         if (vote < 3) {
             return { borderColor: "#E90000" }
@@ -56,18 +58,17 @@ export default function ItemsFilm({ title, date, img, overview, genre, filmsGenr
 
         return { borderColor: "#E9D100" }
     }
-
     return (
         <li className="list-items">
             <img src={`https://image.tmdb.org/t/p/w500${img}`} alt="Poster" className='list-items__img' />
             <div className='list-items-container'>
-                <div className='list-title'><h1 className='list-items-container__title'>{title}</h1><span className="ellipse" style={voteColor()}>{vote}</span ></div>
+                <div className='list-title'><h1 className='list-items-container__title'>{title}</h1><span className="ellipse" style={voteColor()}>{rating || vote}</span ></div>
                 <span className='list-items-container__time'>{format(new Date(date || new Date()), 'MMMM dd, yyyy')}</span>
                 <div className='button-grup'>
                     {genreText.map((el) => <button type="button" className='button button-grup__Action' key={uuidv4()}>{el}</button>)}
                 </div>
                 <p className="list-items-container__wrapper">{overview.length > 208 ? textOverflow(overview) : overview}</p>
-                <Rate className='rate' count="10" allowHalf="true" value={vote} onChange={onChangeVote} />
+                <Rate className='rate' count="10" allowHalf="true" value={rating || vote} onChange={onChangeVote} />
             </div>
         </li>
     )
@@ -81,6 +82,7 @@ ItemsFilm.defaultProps = {
     genre: [],
     filmsGenre: [],
     filmsId: number,
+    rating: 0,
     guestSession: ""
 }
 
@@ -92,5 +94,6 @@ ItemsFilm.propTypes = {
     genre: PropTypes.arrayOf(PropTypes.number),
     filmsGenre: PropTypes.arrayOf(PropTypes.object),
     filmsId: PropTypes.number,
+    rating: PropTypes.number,
     guestSession: PropTypes.string
 }

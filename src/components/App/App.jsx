@@ -4,7 +4,7 @@ import { Offline } from "react-detect-offline";
 import "./App.css";
 import Films from "../Films/Films";
 import FilmsRate from "../FilmsRate/FilmsRate";
-import FilmsGenreContext from "../contex";
+import FilmsGenreContext from "../Contex";
 
 const { TabPane } = Tabs;
 

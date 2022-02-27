@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import { Pagination, Spin, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import ListFilm from '../ListFilm/ListFilm';
-import FilmsGenreContext from "../contex";
+import FilmsGenreContext from "../Contex";
 
 const getFilms = {
   async getResource(currentPage, value) {
