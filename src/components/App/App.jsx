@@ -4,7 +4,7 @@ import { Offline } from "react-detect-offline";
 import "./App.css";
 import Films from "../Films/Films";
 import FilmsRate from "../FilmsRate/FilmsRate";
-import FilmsGenreContext from "../Contex";
+import FilmsGenreContext from "../contex/Contex";
 
 const { TabPane } = Tabs;
 
@@ -52,7 +52,7 @@ function App() {
       <FilmsGenreContext.Provider value={foo}>
         <Tabs defaultActiveKey="1" onChange={handleTabClick}>
           <TabPane tab="Search" key="search" > {activeTab === "search" && <Films guestSession={guestSession} filmsGenre={filmsGenre.genres} />} </TabPane>
-          <TabPane tab="Rated" key="rate" > {activeTab === "rate" && <FilmsRate guestSession={guestSession} filmsGenre={filmsGenre.genres} activeTab={activeTab}/>} </TabPane>
+          <TabPane tab="Rated" key="rate" > {activeTab === "rate" && <FilmsRate guestSession={guestSession} filmsGenre={filmsGenre.genres} activeTab={activeTab} />} </TabPane>
         </Tabs>
       </FilmsGenreContext.Provider>
     </React.StrictMode>

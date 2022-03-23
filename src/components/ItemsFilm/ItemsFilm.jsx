@@ -65,7 +65,7 @@ export default function ItemsFilm({ title, date, img, overview, genre, filmsGenr
                 <div className='list-title'><h1 className='list-items-container__title'>{title}</h1><span className="ellipse" style={voteColor()}>{rating || vote}</span ></div>
                 <span className='list-items-container__time'>{format(new Date(date || new Date()), 'MMMM dd, yyyy')}</span>
                 <div className='button-grup'>
-                    {genreText.map((el) => <button type="button" className='button button-grup__Action' key={uuidv4()}>{el}</button>)}
+                    {genreText.map((elem) => <button type="button" className='button button-grup__Action' key={uuidv4()}>{elem}</button>)}
                 </div>
                 <p className="list-items-container__wrapper">{overview.length > 208 ? textOverflow(overview) : overview}</p>
                 <Rate className='rate' count="10" allowHalf="true" value={rating || vote} onChange={onChangeVote} />

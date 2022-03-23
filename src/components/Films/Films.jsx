@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import _debounce from 'lodash/debounce';
-import { Pagination, Spin, Alert } from 'antd';
+import { Pagination, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import ListFilm from '../ListFilm/ListFilm';
-import FilmsGenreContext from "../Contex";
+import FilmsGenreContext from "../contex/Contex";
 
 const getFilms = {
   async getResource(currentPage, value) {
@@ -24,35 +24,39 @@ function Films({ guestSession }) {
   const [current, setCurrent] = React.useState(1);
   const [total, setTotal] = React.useState(null);
   const [isError, setError] = React.useState(false);
-  const [value, setValue] = React.useState("star");
+  const [value, setValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("");
 
   const { filmsGenre } = useContext(FilmsGenreContext)
 
   React.useEffect(() => {
     let isCancel = false
+    setIsLoading(true)
     async function init() {
-      const movies = await getFilms.getResource(current, value);
-
-      if (!isCancel) {
-
+      if (!isCancel && value.trim()) {
+        const movies = await getFilms.getResource(current, value);
         setFilms(movies.results);
         setTotal(movies.total_results);
+        setInputValue(value)
       }
-
-      setIsLoading(false);
     }
-    init().then(() => setError(false)
+
+    init().then(() => { setError(false); setIsLoading(false) }
     ).catch(() => setError(true))
 
     return () => { isCancel = true }
   }, [current, value])
 
-  const debouncedOnChange = _debounce(((ev) => {
-    if (ev.target.value.length === 0) {
-      setValue("star")
+  const debouncedOnChange = _debounce(((event) => {
+    if (event.target.value.length === 0) {
+      setValue("");
+      setFilms([]);
+      setTotal(null);
+      setInputValue("")
       return
     }
-    setValue(ev.target.value)
+
+    setValue(event.target.value);
   }), 300)
 
   const onChange = (page) => {
@@ -66,12 +70,9 @@ function Films({ guestSession }) {
     />
   }
 
-  if (isLoading) {
-    return <Spin size="large" />
-  }
-
   return (
-    <><ListFilm films={films} filmsGenre={filmsGenre.genres} debouncedOnChange={debouncedOnChange} guestSession={guestSession} /><Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} /></>
+    <> <ListFilm films={films} filmsGenre={filmsGenre.genres} debouncedOnChange={debouncedOnChange} guestSession={guestSession} value={inputValue} isLoading={isLoading} />
+      <Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} /></>
   )
 }
 

@@ -1,0 +1,5 @@
+node_modules
+/.vscode
+/.git
+package.json
+src/index.jsx

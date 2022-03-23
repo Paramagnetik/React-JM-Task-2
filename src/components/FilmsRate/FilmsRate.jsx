@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Pagination } from 'antd';
 import PropTypes from 'prop-types';
 import ListFilm from '../ListFilm/ListFilm';
-import FilmsGenreContext from "../Contex";
+import FilmsGenreContext from "../contex/Contex";
 
 const getFilmsRate = {
     async getRatedMovies(guestSession, currentPage) {
@@ -43,8 +43,9 @@ function FilmsRate({ guestSession, activeTab }) {
         setCurrent(page);
     };
     return (
-        <><ListFilm films={films} filmsGenre={filmsGenre.genres} guestSession={guestSession} activeTab={activeTab} />
-            <Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} /></>
+        <>
+            {films.length === 0 ? <h1>no rated films</h1> : <ListFilm films={films} filmsGenre={filmsGenre.genres} guestSession={guestSession} activeTab={activeTab} />}
+            < Pagination current={current} total={total} onChange={onChange} className='pagination' showSizeChanger={false} /></>
     )
 }
 
